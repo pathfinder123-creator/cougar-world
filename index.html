@@ -116,6 +116,24 @@
     .privacy { color: var(--muted); font-size: .82rem; }
     .close { flex: 0 0 auto; border: 0; border-radius: 999px; padding: .72rem 1.1rem; color: white; background: var(--collin); cursor: pointer; font-weight: 700; }
     .close:hover, .close:focus-visible { background: var(--cobalt); outline: 3px solid #b8dcff; }
+    .ai-polish-row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 9px; }
+    .ai-polish-btn { border: 1px solid #8fb3dc; border-radius: 999px; padding: .55rem .85rem; color: #0c2e82; background: #edf5ff; cursor: pointer; font-weight: 750; }
+    .ai-polish-btn:hover, .ai-polish-btn:focus-visible { color: white; background: #0c2e82; outline: 3px solid #c9e2ff; }
+    .ai-polish-btn:disabled { cursor: wait; opacity: .6; }
+    .ai-note { color: var(--muted); font-size: .8rem; }
+    .ai-review-body { padding: 22px 26px 26px; }
+    .ai-review-body > p { margin-top: 0; color: var(--muted); }
+    .ai-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .ai-copy { padding: 14px; border: 1px solid #d4e0ed; border-radius: 12px; background: #f8fbff; }
+    .ai-copy strong { display: block; margin-bottom: 7px; color: var(--collin); }
+    .ai-copy textarea { width: 100%; min-height: 125px; padding: .7rem; border: 1px solid #c5d4e4; border-radius: 9px; font: inherit; resize: vertical; }
+    .ai-suggestions { display: grid; gap: 9px; margin-top: 15px; max-height: 250px; overflow: auto; }
+    .ai-suggestion { padding: 13px 14px; border-left: 4px solid #1767b6; border-radius: 9px; background: #f1f7ff; }
+    .ai-suggestion.coaching { border-left-color: #a9650c; background: #fff7e9; }
+    .ai-suggestion strong { color: var(--collin); }
+    .ai-suggestion p { margin: 4px 0 0; color: #42536b; }
+    .apply-ai-fix { margin-top: 8px; border: 0; border-radius: 999px; padding: .42rem .7rem; color: white; background: #1767b6; cursor: pointer; font-weight: 700; }
+    .ai-status { min-height: 1.3rem; margin: 10px 0 0; color: #7f2c36; font-weight: 650; }
 
     .competency-lab, .workplace-lab, .development-lab, .next-move-lab, .find-place-lab, .connect-lab { display: none; min-height: 100vh; background: #f3f7fc; }
     .competency-lab.active { display: block; }
@@ -347,6 +365,7 @@
       .decision-grid, .experiment-grid { grid-template-columns: 1fr; }
       .resource-next { grid-template-columns: 1fr; }
       .connection-grid { grid-template-columns: 1fr; }
+      .ai-columns { grid-template-columns: 1fr; }
       .path-card { min-height: 0; padding: 20px; }
       .path-icon { float: left; margin: 0 15px 10px 0; }
       .path-number { margin-top: 1px; }
@@ -597,7 +616,7 @@
             <div class="field full"><label for="work-facts">What facts do you want to keep in view?</label><textarea id="work-facts" placeholder="What was said, done, requested, or observed?"></textarea></div>
             <div class="field full"><label for="work-perspective">What perspective or information should you consider?</label><textarea id="work-perspective" placeholder="What might you ask, verify, or understand differently?"></textarea></div>
             <div class="field full"><label for="work-action">What is your next constructive action?</label><input id="work-action" placeholder="Example: Ask my supervisor to clarify the priority"></div>
-            <div class="field"><label for="work-opener">How might you begin the conversation?</label><textarea id="work-opener" placeholder="Example: Could we clarify what success looks like for this assignment?"></textarea></div>
+            <div class="field"><label for="work-opener">How might you begin the conversation?</label><textarea id="work-opener" placeholder="Example: Could we clarify what success looks like for this assignment?"></textarea><div class="ai-polish-row"><button class="ai-polish-btn" type="button" data-ai-target="work-opener" data-ai-label="conversation opener">Polish carefully with AI</button><span class="ai-note">Optional · preserves your meaning</span></div></div>
             <div class="field"><label for="work-consult">Who could help you think well?</label><textarea id="work-consult" placeholder="Supervisor, mentor, HR, trusted colleague, Career Center..."></textarea></div>
           </div>
           <p class="lab-error" id="work-plan-error" role="alert"></p>
@@ -731,7 +750,7 @@
       <section class="lab-step" data-find-place-step="4"><div class="step-card">
         <p class="step-kicker">Hold a working hypothesis</p><h2>Create a provisional professional-role statement</h2><p class="step-lead">Edit the statement until it sounds useful and honest. It is a compass heading, not a contract.</p>
         <div class="role-preview" id="role-preview"></div>
-        <div class="field full"><label for="place-statement">My statement</label><textarea id="place-statement" style="min-height:125px"></textarea></div>
+        <div class="field full"><label for="place-statement">My statement</label><textarea id="place-statement" style="min-height:125px"></textarea><div class="ai-polish-row"><button class="ai-polish-btn" type="button" data-ai-target="place-statement" data-ai-label="professional-role statement">Polish carefully with AI</button><span class="ai-note">Optional · no experience or qualifications will be invented</span></div></div>
         <div class="field full" style="margin-top:14px"><label for="place-test">One way I could test this possibility</label><input id="place-test" placeholder="Talk with a professional, explore roles, try a project, seek relevant experience..."></div>
         <p class="lab-error" id="role-error" role="alert"></p>
         <div class="action-card" id="find-place-card" hidden><div class="action-card-head"><span>COUGAR WORLD</span><h3>My Professional Direction Card</h3></div><div class="action-card-body" id="find-place-card-body"></div></div>
@@ -826,6 +845,16 @@
   <dialog id="path-dialog" aria-labelledby="dialog-title">
     <div class="dialog-top" id="dialog-top"><span class="path-icon" id="dialog-icon" aria-hidden="true"></span><h2 id="dialog-title"></h2><p id="dialog-subtitle"></p></div>
     <div class="dialog-body"><h3>A visit to this pathway might help you:</h3><ul id="dialog-list"></ul><div class="dialog-actions"><span class="privacy">Your personal reflection would remain private unless you deliberately choose to share it.</span><button class="close" id="dialog-close">Return to Cougar World</button></div></div>
+  </dialog>
+
+  <dialog id="ai-review-dialog" aria-labelledby="ai-review-title">
+    <div class="dialog-top" style="--accent:#1767b6"><span class="path-icon" aria-hidden="true">Aa</span><h2 id="ai-review-title">Conservative AI Polish</h2><p id="ai-review-subtitle">Reviewing your writing without changing its meaning or voice.</p></div>
+    <div class="ai-review-body">
+      <p>Small, defensible mechanical corrections may be applied. Clarity and vocabulary concerns are presented as questions for you to consider.</p>
+      <div class="ai-columns"><div class="ai-copy"><strong>Original</strong><div id="ai-original"></div></div><div class="ai-copy"><strong>Reviewed version</strong><textarea id="ai-reviewed" aria-label="Reviewed version"></textarea></div></div>
+      <div class="ai-suggestions" id="ai-suggestions"></div><p class="ai-status" id="ai-status" role="alert"></p>
+      <div class="dialog-actions"><span class="privacy">Text is sent to the constrained Cougar Word Lab service only when you request this review.</span><div><button class="lab-btn secondary" type="button" id="ai-cancel">Keep original</button> <button class="lab-btn primary" type="button" id="ai-use">Use reviewed version</button></div></div>
+    </div>
   </dialog>
 
   <script>
@@ -1006,6 +1035,50 @@
       events: { icon: "⌖", title: "Attend a career event", short: "Meet employers, explore possibilities, or practice professional connection.", text: "Career fairs can remain useful after graduation—whether you are looking actively, exploring a change, or learning which employers and roles are growing.", links: [["View career fair information", "https://www.collin.edu/studentresources/career/careerfair"], ["Talk with the Career Center", "https://bookings.cloud.microsoft/book/CareerCenterManagers1@collin.edu/?ismsaljsauthenabled=true"]] },
       contribute: { icon: "+", title: "Reach back and contribute", short: "Offer insight, encouragement, connection, or opportunity to future Cougars.", text: "Contribution can begin modestly: share a lesson from your journey, express interest in volunteering, connect Collin with an opportunity, or ask how your experience might help current students.", links: [["Contact Alumni Relations", "mailto:alumni@collin.edu?subject=Interest%20in%20Contributing%20to%20Collin%20Students"], ["Explore alumni opportunities", "https://www.collin.edu/alumni/"]] }
     };
+    const WORD_LAB_REVIEW_URL = "https://super-grass-e070.daniels75040.workers.dev/review";
+    const aiDialog = document.getElementById("ai-review-dialog");
+    const aiReviewState = { targetId: "", original: "", suggestions: [], applied: new Set() };
+    const renderAiSuggestions = () => {
+      const list = document.getElementById("ai-suggestions"); list.innerHTML = "";
+      const mechanics = aiReviewState.suggestions.filter(item => item.mode === "correction");
+      const applied = mechanics.filter((item, index) => aiReviewState.applied.has(aiReviewState.suggestions.indexOf(item))).sort((a, b) => b.start - a.start);
+      let reviewed = aiReviewState.original;
+      applied.forEach(item => { reviewed = reviewed.slice(0, item.start) + item.replacement + reviewed.slice(item.end); });
+      document.getElementById("ai-reviewed").value = reviewed;
+      if (!aiReviewState.suggestions.length) { const empty = document.createElement("div"); empty.className = "ai-suggestion"; empty.textContent = "No defensible corrections or coaching concerns were identified. Your original remains unchanged."; list.appendChild(empty); return; }
+      aiReviewState.suggestions.forEach((item, index) => {
+        const card = document.createElement("div"); card.className = `ai-suggestion${item.mode === "coaching" ? " coaching" : ""}`;
+        const title = document.createElement("strong"); title.textContent = `${item.category}: “${item.original}”`; card.appendChild(title);
+        const explanation = document.createElement("p"); explanation.textContent = item.explanation; card.appendChild(explanation);
+        if (item.mode === "correction") {
+          const change = document.createElement("p"); change.textContent = `Suggested correction: “${item.replacement}”`; card.appendChild(change);
+          const button = document.createElement("button"); button.type = "button"; button.className = "apply-ai-fix"; button.dataset.aiFix = index; button.textContent = aiReviewState.applied.has(index) ? "Correction applied" : "Apply this correction"; button.disabled = aiReviewState.applied.has(index); card.appendChild(button);
+        } else { const question = document.createElement("p"); question.textContent = item.question; question.style.fontWeight = "700"; card.appendChild(question); }
+        list.appendChild(card);
+      });
+    };
+    document.addEventListener("click", async event => {
+      const trigger = event.target.closest("[data-ai-target]");
+      if (!trigger) return;
+      const target = document.getElementById(trigger.dataset.aiTarget); const text = target?.value.trim();
+      if (!text) { target?.focus(); return; }
+      aiReviewState.targetId = trigger.dataset.aiTarget; aiReviewState.original = target.value; aiReviewState.suggestions = []; aiReviewState.applied = new Set();
+      document.getElementById("ai-review-subtitle").textContent = `Reviewing your ${trigger.dataset.aiLabel} without changing its meaning or voice.`;
+      document.getElementById("ai-original").textContent = target.value; document.getElementById("ai-reviewed").value = target.value;
+      document.getElementById("ai-suggestions").innerHTML = ""; document.getElementById("ai-status").textContent = "Reviewing your writing…"; document.getElementById("ai-use").disabled = true;
+      aiDialog.showModal(); trigger.disabled = true;
+      try {
+        if (location.protocol === "file:") throw new Error("AI review becomes available after this HTML file is hosted on an approved web address.");
+        const response = await fetch(WORD_LAB_REVIEW_URL, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: target.value, reviews: ["mechanics", "clarity", "vocabulary"] }) });
+        const data = await response.json(); if (!response.ok) throw new Error(data.error || "The writing review could not be completed.");
+        aiReviewState.suggestions = data.suggestions || []; document.getElementById("ai-status").textContent = ""; renderAiSuggestions(); document.getElementById("ai-use").disabled = false;
+      } catch (error) { document.getElementById("ai-status").textContent = `${error.message} If this page was just published, its web address may need to be added to the Worker’s ALLOWED_ORIGINS setting.`; }
+      finally { trigger.disabled = false; }
+    });
+    document.getElementById("ai-suggestions").addEventListener("click", event => { const button = event.target.closest("[data-ai-fix]"); if (!button) return; aiReviewState.applied.add(Number(button.dataset.aiFix)); renderAiSuggestions(); });
+    document.getElementById("ai-cancel").addEventListener("click", () => aiDialog.close());
+    document.getElementById("ai-use").addEventListener("click", () => { const target = document.getElementById(aiReviewState.targetId); if (target) { target.value = document.getElementById("ai-reviewed").value; target.dispatchEvent(new Event("input", { bubbles: true })); } aiDialog.close(); });
+
     const dialog = document.getElementById("path-dialog");
     const labState = { step: 1, need: "", competency: "", behavior: "" };
     const workState = { step: 1, situation: "", lens: "", response: "" };
@@ -1244,7 +1317,7 @@
         document.getElementById("reflection-stack").innerHTML = developmentState.dimensions.map(key => {
           const item = developmentDimensions[key];
           const prompt = item[developmentState.route];
-          return `<div class="reflection-box" style="--dimension:${item.color};--dimension-soft:${item.soft}"><label for="reflection-${key}">${item.label}: ${prompt}</label><textarea id="reflection-${key}" data-reflection-key="${key}" placeholder="A few words are enough.">${escapeHtml(developmentState.reflections[key] || "")}</textarea></div>`;
+          return `<div class="reflection-box" style="--dimension:${item.color};--dimension-soft:${item.soft}"><label for="reflection-${key}">${item.label}: ${prompt}</label><textarea id="reflection-${key}" data-reflection-key="${key}" placeholder="A few words are enough.">${escapeHtml(developmentState.reflections[key] || "")}</textarea><div class="ai-polish-row"><button class="ai-polish-btn" type="button" data-ai-target="reflection-${key}" data-ai-label="${item.label.toLowerCase()} reflection">Polish carefully with AI</button><span class="ai-note">Optional · your meaning remains yours</span></div></div>`;
         }).join("");
       }));
       showDevelopmentStep(3);
